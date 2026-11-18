@@ -1,0 +1,293 @@
+# VeyrionCharacter - THE RIFT AWAKENING (world-based race gacha)
+# Reload with /raceadmin altar reload (or /veyrioncharacter reload). Running rituals keep the settings they started with.
+#
+# Everything here is vanilla: particles, sounds, titles, boss bars and an inventory menu. No resource pack and
+# no other plugin is needed. The race itself is always chosen by the normal race system (races.yml) BEFORE the
+# cinematic starts; nothing in this file can change which race a player gets.
+#
+# Text uses MiniMessage. Placeholders: <race> (coloured race name), <race_name> (plain), <description>,
+# <player>, <chance> (percent). Sounds are vanilla sound keys, for example block.beacon.activate.
+# Particles are Bukkit particle names (END_ROD, FLAME, ...). DUST also accepts color and size.
+# The altar position is NOT stored here: use /raceadmin altar set (saved in altar.yml).
+
+enabled: true
+
+# true  = /race roll keeps working as before.
+# false = /race roll is refused and players must use the altar.
+allow-command-roll: true
+
+altar:
+  # Minimum time between two altar clicks of the same player (stops click spam).
+  interaction-cooldown-ms: 1500
+  # The player must be within this many blocks of the altar when confirming (checked again before rolling).
+  max-start-distance: 6.0
+  # Ritual centre = middle of the altar block, this many blocks above its top surface.
+  center-offset-y: 1.0
+  # If the player gets farther than this from the centre (teleport etc.) the ritual stops safely.
+  leash-radius: 4.0
+
+ritual:
+  # Ticks between animation steps (20 ticks = 1 second). Higher = fewer packets, choppier animation.
+  tick-interval: 2
+  # Phase lengths in ticks.
+  activation-ticks: 60
+  resonance-ticks-per-race: 40
+  accumulation-ticks: 60
+  collapse-ticks: 30
+  reveal-ticks: 120
+  completion-ticks: 20
+
+movement:
+  # Cancel position changes of the ritual player (head rotation stays free).
+  lock: true
+  # Also set walk and fly speed to 0 (smoother than only cancelling moves). Originals are restored afterwards.
+  lock-speed: true
+  # The ritual player takes no damage while the ritual runs.
+  protect-from-damage: true
+
+effects:
+  # Radius (blocks) of the main magic circles.
+  radius: 2.6
+  # Height (blocks) of columns and floating motes.
+  height: 3.0
+  # Multiplies every particle amount. 0.5 = half, 2 = double.
+  particle-multiplier: 1.0
+  # Hard cap of particles sent to the ritual player per animation step (lag protection).
+  max-particles-per-step: 160
+  # Particles and sounds are only sent to the ritual player, never to bystanders.
+
+boss-bar:
+  enabled: true
+  title: "<gradient:#b388ff:#7c4dff>The Rift Awakening</gradient>"
+  # BLUE, GREEN, PINK, PURPLE, RED, WHITE, YELLOW
+  color: PURPLE
+  # PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, NOTCHED_20
+  overlay: PROGRESS
+
+gui:
+  title: "<dark_purple>The Rift Awakening"
+  begin:
+    material: ENDER_EYE
+    name: "<green><bold>Begin Awakening"
+    lore:
+      - "<gray>Awaken the blood within you."
+      - "<red>This can only be done once."
+  cancel:
+    material: BARRIER
+    name: "<red><bold>Cancel"
+    lore:
+      - "<gray>Step away from the altar."
+  info:
+    material: AMETHYST_SHARD
+    name: "<light_purple>The Altar of the Rift"
+    lore:
+      - "<gray>Your race is chosen by the Rift"
+      - "<gray>and kept forever."
+      - "<gray>Stay near the altar during the ritual."
+
+# Stage visuals. title: MiniMessage title/subtitle with fade-in/stay/fade-out ticks.
+stages:
+  activation:
+    title:
+      title: "<dark_purple>The Altar Stirs"
+      subtitle: "<gray>Something ancient is waking..."
+      fade-in: 10
+      stay: 40
+      fade-out: 10
+    particle: {type: ENCHANT, count: 2, spread: 0.05, speed: 0.4}
+    sound: {key: block.beacon.activate, volume: 0.8, pitch: 0.7}
+    ambient-sound: {key: block.beacon.ambient, volume: 0.6, pitch: 0.8}
+    ambient-every-ticks: 40
+  resonance:
+    title:
+      title: "<light_purple>Soul Resonance"
+      subtitle: "<gray>Four bloodlines answer the call..."
+      fade-in: 10
+      stay: 30
+      fade-out: 10
+    # Visual only. This list and its order have NO influence on the result.
+    races: [human, elf, beast, dragon]
+  accumulation:
+    title:
+      title: "<aqua>The Rift Opens"
+      subtitle: "<gray>Power gathers..."
+      fade-in: 5
+      stay: 40
+      fade-out: 10
+    particle: {type: END_ROD, count: 1, spread: 0.02, speed: 0.02}
+    accent: {type: PORTAL, count: 2, spread: 0.1, speed: 0.6}
+    # Sound is repeated; pitch rises from pitch to pitch x 2.
+    sound: {key: block.beacon.ambient, volume: 0.7, pitch: 0.6}
+    sound-every-ticks: 10
+  collapse:
+    title:
+      title: "<white><obfuscated>||</obfuscated> <dark_purple>Dimensional Collapse <white><obfuscated>||"
+      subtitle: ""
+      fade-in: 0
+      stay: 15
+      fade-out: 15
+    particle: {type: REVERSE_PORTAL, count: 2, spread: 0.05, speed: 0.3}
+    sound: {key: block.end_portal.spawn, volume: 0.6, pitch: 1.4}
+    burst-particle: {type: FIREWORK, count: 1, spread: 0.0, speed: 0.35}
+    burst-count: 60
+    burst-sound: {key: entity.generic.explode, volume: 0.7, pitch: 0.8}
+
+# Per race. Colours come from races.yml unless 'color' is set here.
+# resonance.shape: sides (3+) and star (true = pentagram style lines). reveal.style: PILLAR, HELIX, SHOCKWAVE, VORTEX.
+# A race without an entry here uses 'default-race'.
+races:
+  human:
+    resonance:
+      shape: {sides: 4, star: false}
+      particle: {type: END_ROD, count: 1, spread: 0.0, speed: 0.0}
+      accent: {type: DUST, count: 1, spread: 0.05, speed: 0.0, size: 1.0}
+      sound: {key: block.note_block.bell, volume: 0.9, pitch: 1.0}
+      title:
+        title: "<color:#F2C96B>Human"
+        subtitle: "<gray>Adaptable. Ambitious."
+        fade-in: 5
+        stay: 25
+        fade-out: 5
+    reveal:
+      style: PILLAR
+      particle: {type: END_ROD, count: 1, spread: 0.03, speed: 0.01}
+      secondary: {type: TOTEM_OF_UNDYING, count: 1, spread: 0.2, speed: 0.3}
+      sound: {key: entity.player.levelup, volume: 1.0, pitch: 0.8}
+      accent-sound: {key: item.totem.use, volume: 0.5, pitch: 1.2}
+      title:
+        title: "<color:#F2C96B><bold><race_name>"
+        subtitle: "<gray><description>"
+        fade-in: 10
+        stay: 80
+        fade-out: 20
+      lore: "<color:#F2C96B>The unbroken will of Humanity has awakened within you."
+  elf:
+    resonance:
+      shape: {sides: 3, star: false}
+      particle: {type: ENCHANT, count: 1, spread: 0.0, speed: 0.0}
+      accent: {type: DUST, count: 1, spread: 0.05, speed: 0.0, size: 1.0}
+      sound: {key: block.amethyst_block.resonate, volume: 0.9, pitch: 1.2}
+      title:
+        title: "<color:#7CFC8A>Elf"
+        subtitle: "<gray>Graceful. Eternal."
+        fade-in: 5
+        stay: 25
+        fade-out: 5
+    reveal:
+      style: HELIX
+      particle: {type: HAPPY_VILLAGER, count: 1, spread: 0.05, speed: 0.0}
+      secondary: {type: ENCHANT, count: 2, spread: 0.1, speed: 0.5}
+      sound: {key: block.amethyst_cluster.break, volume: 1.0, pitch: 1.0}
+      accent-sound: {key: entity.experience_orb.pickup, volume: 0.6, pitch: 1.5}
+      title:
+        title: "<color:#7CFC8A><bold><race_name>"
+        subtitle: "<gray><description>"
+        fade-in: 10
+        stay: 80
+        fade-out: 20
+      lore: "<color:#7CFC8A>The whispering ancient forests have awakened within you."
+  beast:
+    resonance:
+      shape: {sides: 5, star: true}
+      particle: {type: FLAME, count: 1, spread: 0.0, speed: 0.0}
+      accent: {type: DUST, count: 1, spread: 0.05, speed: 0.0, size: 1.2}
+      sound: {key: entity.wolf.growl, volume: 0.9, pitch: 0.9}
+      title:
+        title: "<color:#D98A4E>Beast"
+        subtitle: "<gray>Fierce. Untamed."
+        fade-in: 5
+        stay: 25
+        fade-out: 5
+    reveal:
+      style: SHOCKWAVE
+      particle: {type: FLAME, count: 1, spread: 0.05, speed: 0.02}
+      secondary: {type: CRIT, count: 1, spread: 0.3, speed: 0.4}
+      sound: {key: entity.wolf.howl, volume: 1.0, pitch: 0.8}
+      accent-sound: {key: entity.ravager.roar, volume: 0.6, pitch: 1.0}
+      title:
+        title: "<color:#D98A4E><bold><race_name>"
+        subtitle: "<gray><description>"
+        fade-in: 10
+        stay: 80
+        fade-out: 20
+      lore: "<color:#D98A4E>The wild blood of the Beasts has awakened within you."
+  dragon:
+    resonance:
+      shape: {sides: 6, star: true}
+      particle: {type: SOUL_FIRE_FLAME, count: 1, spread: 0.0, speed: 0.0}
+      accent: {type: DUST, count: 1, spread: 0.05, speed: 0.0, size: 1.4}
+      sound: {key: entity.ender_dragon.growl, volume: 0.5, pitch: 1.1}
+      title:
+        title: "<color:#FF5A4D>Dragon"
+        subtitle: "<gray>Rare. Mighty."
+        fade-in: 5
+        stay: 25
+        fade-out: 5
+    reveal:
+      style: VORTEX
+      particle: {type: FLAME, count: 1, spread: 0.05, speed: 0.02}
+      secondary: {type: DRAGON_BREATH, count: 2, spread: 0.2, speed: 0.03}
+      sound: {key: entity.ender_dragon.growl, volume: 1.0, pitch: 0.7}
+      accent-sound: {key: entity.generic.explode, volume: 0.6, pitch: 0.6}
+      title:
+        title: "<color:#FF5A4D><bold><race_name>"
+        subtitle: "<gray><description>"
+        fade-in: 10
+        stay: 80
+        fade-out: 20
+      lore: "<color:#FF5A4D>The ancient blood of the Dragons has awakened within you."
+
+# Used for any race that has no entry above (for example one you add to races.yml).
+default-race:
+  resonance:
+    shape: {sides: 4, star: false}
+    particle: {type: END_ROD, count: 1, spread: 0.0, speed: 0.0}
+    accent: {type: DUST, count: 1, spread: 0.05, speed: 0.0, size: 1.0}
+    sound: {key: block.amethyst_block.chime, volume: 0.9, pitch: 1.0}
+    title:
+      title: "<race>"
+      subtitle: ""
+      fade-in: 5
+      stay: 25
+      fade-out: 5
+  reveal:
+    style: PILLAR
+    particle: {type: END_ROD, count: 1, spread: 0.03, speed: 0.01}
+    secondary: {type: TOTEM_OF_UNDYING, count: 1, spread: 0.2, speed: 0.3}
+    sound: {key: entity.player.levelup, volume: 1.0, pitch: 0.8}
+    accent-sound: {key: item.totem.use, volume: 0.5, pitch: 1.2}
+    title:
+      title: "<race>"
+      subtitle: "<gray><description>"
+      fade-in: 10
+      stay: 80
+      fade-out: 20
+    lore: "<gray>The blood of the <race> <gray>has awakened within you."
+
+messages:
+  prefix: "<gray>[<dark_purple>Rift</dark_purple>]</gray> "
+  no-permission: "<red>You do not have permission to do that."
+  disabled: "<red>The Rift Awakening is not available right now."
+  already-completed: "<gray>The altar is silent. Your blood has already awakened."
+  busy: "<yellow>The ritual is already in progress."
+  too-far: "<red>You are too far from the altar."
+  in-vehicle: "<red>Leave your vehicle before the ritual."
+  not-ready: "<red>Your character data is not ready yet. Try again in a moment."
+  no-races: "<red>No races are available right now. Ask an admin."
+  error: "<red>The ritual failed and nothing was changed. Check with an admin."
+  cancelled: "<gray>You step back from the altar."
+  completed: "<green>Your awakening is complete. You are now <race> <gray>(<chance>% chance)"
+  interrupted: "<yellow>Your awakening was interrupted, but the Rift had already chosen: you are <race><yellow>."
+  welcome-back: "<yellow>While you were away the Rift chose your race: <race><yellow>."
+  roll-disabled: "<red>Use the Awakening Altar to awaken your race."
+  admin:
+    usage: "<yellow>Usage: /<label> altar set | remove | info | reload"
+    set: "<green>Awakening altar set at <world> <x> <y> <z>."
+    set-no-block: "<red>Stand on top of a solid block: that block becomes the altar."
+    removed: "<green>Awakening altar removed."
+    none: "<yellow>No altar is configured."
+    info: "<gray>Altar: <white><world> <x> <y> <z> <gray>(rituals running: <white><sessions><gray>)"
+    info-missing-world: "<red>The altar world '<world>' is not loaded."
+    reloaded: "<green>Awakening configuration reloaded."
+    save-failed: "<red>Could not save the altar. Check the console."
+    players-only: "<red>Only players can use this command."

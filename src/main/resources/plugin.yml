@@ -1,0 +1,50 @@
+name: VeyrionCharacter
+version: '${project.version}'
+main: com.veyrion.character.core.VeyrionCharacterPlugin
+api-version: '1.21'
+description: Character data foundation for the Veyrion server.
+authors: [Veyrion]
+
+commands:
+  veyrioncharacter:
+    description: Inspect character data, add EXP, or reload the plugin.
+    usage: "/<command> info [player] | addexp <player> <amount> | reload"
+    aliases: [vcharacter, vchar]
+  quest:
+    description: View and manage your quests.
+    usage: "/<command> [active | abandon [quest_id]]"
+    aliases: [quests]
+  questadmin:
+    description: Quest administration.
+    usage: "/<command> reload | give | reset | complete | list | info | progress"
+    aliases: [qadmin]
+  race:
+    description: View your race or roll for one.
+    usage: "/<command> [info | roll]"
+  raceadmin:
+    description: Race administration.
+    usage: "/<command> set <player> <race> | reset <player> | chances | altar set|remove|info|reload"
+    aliases: [radmin]
+
+permissions:
+  veyrion.character.info:
+    description: View your own character data.
+    default: true
+  veyrion.character.admin:
+    description: Reload the plugin, add EXP and view other players' character data.
+    default: op
+  veyrion.quest.use:
+    description: Use /quest.
+    default: true
+  veyrion.quest.admin:
+    description: Use /questadmin.
+    default: op
+  veyrion.race.use:
+    description: Use /race and /race roll.
+    default: true
+  veyrion.race.admin:
+    description: Use /raceadmin, including the awakening altar commands.
+    default: op
+  veyrion.awakening.use:
+    description: Use the Rift Awakening altar.
+    default: true

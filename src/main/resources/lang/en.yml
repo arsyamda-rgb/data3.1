@@ -1,0 +1,103 @@
+# VeyrionCharacter - English messages (MiniMessage format)
+prefix: "<gray>[<gold>VeyrionCharacter</gold>]</gray> "
+
+command:
+  usage: "<yellow>Usage: /<label> info [player] | addexp <player> <amount> | reload"
+  addexp-usage: "<yellow>Usage: /<label> addexp <player> <amount>"
+  invalid-amount: "<red>Amount must be a positive whole number."
+  addexp-success: "<green>Gave <amount> Adventure EXP to <player>. Rank: <yellow><rank></yellow>."
+  no-permission: "<red>You do not have permission to do that."
+  console-needs-player: "<red>Console must specify a player: /<label> info [player]"
+  player-not-found: "<red>No known player named <player>."
+  reload-success: "<green>Configuration, language, race and quest files reloaded."
+  reload-database-note: "<yellow>Database settings changed; a server restart is required to apply them."
+  data-error: "<red>Could not read or write character data. Check the console for details."
+  no-character: "<red><player> has no character data yet."
+
+info:
+  header: "<gold>Character: <white><player>"
+  race: "<gray>Race: <white><value>"
+  exp: "<gray>Adventure EXP: <white><value>"
+  rank: "<gray>Adventure Rank: <white><value>"
+  gacha: "<gray>Gacha completed: <white><value>"
+  created: "<gray>Created: <white><value>"
+
+# Note: never use bare yes/no/on/off/true/false as YAML keys; they are parsed as booleans.
+value:
+  none: "None"
+  affirmative: "Yes"
+  negative: "No"
+
+exp:
+  gain: "<gray>+<green><amount></green> Adventure EXP"
+
+rank:
+  up: "<gold>Rank up! You are now <yellow><rank></yellow>."
+
+quest:
+  players-only: "<red>Only players can use this command."
+  usage: "<yellow>Usage: /<label> [active | abandon [quest_id]]"
+  header: "<gold>Your active quests"
+  none-active: "<gray>You have no active quests."
+  active-line: "<yellow><name> <dark_gray>(<id>)"
+  removed-line: "<red><id> <gray>(quest no longer exists)"
+  objective-line: "<gray>  - <description>: <white><progress>/<amount>"
+  progress: "<gray><description>: <white><progress>/<amount>"
+  accepted: "<green>Quest accepted: <yellow><name>"
+  completed: "<green>Quest completed: <yellow><name>"
+  reward-exp: "<gray>  +<exp> Adventure EXP"
+  abandoned: "<yellow>Quest abandoned: <id>"
+  abandon-disabled: "<red>Abandoning quests is disabled."
+  abandon-usage: "<yellow>Usage: /<label> abandon <quest_id>"
+  not-active: "<red>That quest is not active."
+  unknown: "<red>Unknown quest: <id>"
+  state-loading: "<red>Quest data is still loading. Try again in a moment."
+  error: "<red>Quest operation failed. Check the console for details."
+  blocked:
+    active: "<red>That quest is already active."
+    completed: "<red>You have already completed that quest."
+    cooldown: "<red>That quest is on cooldown for <time>."
+    prerequisite: "<red>You must complete earlier quests first."
+    rank: "<red>Your Adventure Rank is too low. Required: <rank>."
+
+admin:
+  usage: "<yellow>Usage: /<label> reload | give <player> <quest> | reset <player> <quest> | complete <player> <quest> | list | info <quest> | progress <player> <quest> <objective> [amount]"
+  reloaded: "<green>Loaded <count> quest(s)."
+  player-offline: "<red><player> is not online."
+  given: "<green>Gave quest <id> to <player>."
+  give-failed: "<red>Could not give quest <id> to <player> (see the other message or console)."
+  reset: "<green>Reset quest <id> for <player>."
+  completed: "<green>Completed quest <id> for <player>."
+  not-active: "<red><player> does not have quest <id> active."
+  progressed: "<green>Progressed objective <objective> of <id> for <player>."
+  unknown-objective: "<red>Quest <id> has no objective named <objective>."
+  list-header: "<gold>Quests (<count>)"
+  list-line: "<gray>- <yellow><id> <gray>[<type>] <white><name>"
+  info-header: "<gold>Quest <yellow><id> <gray>[<type>]"
+  info-line: "<gray><label>: <white><value>"
+  info-objective: "<gray>  - <id>: <white><type> x<amount> <gray>(<description>)"
+
+race:
+  players-only: "<red>Only players can use this command."
+  usage: "<yellow>Usage: /<label> [info | roll]"
+  info-header: "<gold>Your race"
+  info-race: "<gray>Race: <value>"
+  info-description: "<gray><description>"
+  info-gacha: "<gray>Gacha completed: <value>"
+  info-hint: "<yellow>You have not chosen a race yet. Use <white>/race roll</white> to roll one."
+  roll-success: "<green>The roll is done! You are now <race> <gray>(<chance>% chance)"
+  roll-already: "<red>You have already rolled your race."
+  roll-in-progress: "<yellow>Your roll is already being processed."
+  no-races: "<red>No races are available to roll right now. Ask an admin."
+  no-character: "<red>Your character data is not ready yet. Try again in a moment."
+  admin:
+    usage: "<yellow>Usage: /<label> set <player> <race> | reset <player> | chances | altar set|remove|info|reload"
+    unknown-race: "<red>Unknown race '<race>'. Available: <list>"
+    set-success: "<green>Set the race of <player> to <race>."
+    set-notify: "<yellow>An admin set your race to <race>."
+    reset-success: "<green>Reset the race and gacha status of <player>."
+    reset-notify: "<yellow>An admin reset your race. You can use /race roll again."
+    chances-header: "<gold>Race chances <gray>(<counted> character(s) counted)"
+    chances-line: "<gray>- <race> <dark_gray>| <gray>weight <white><weight> <dark_gray>| <gray>pop <white><population><gray>/<white><expected> <dark_gray>| <gray>x<white><multiplier> <dark_gray>| <yellow><chance>%"
+    chances-dynamic-off: "<gray>Dynamic chance is off: base weights are used."
+    chances-other: "<gray>Characters with a legacy or disabled race (not counted): <white><count>"
